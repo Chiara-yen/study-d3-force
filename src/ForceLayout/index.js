@@ -9,7 +9,7 @@ export const ForceLayout = ({ data }) => {
   useEffect(() => {
     const svgElement = svgRef.current;
     setSVG(svgElement);
-    setSimulation(svgElement, data.nodes);
+    setSimulation(svgElement, data.nodes); // will append 4 props vx, vy, x, v on each node object
     drawNodes(svgElement, data.nodes);
   });
   return <svg ref={svgRef} />;
