@@ -13,8 +13,8 @@ const drawNodes = (svgElement, data) => {
     .append("circle")
     .attr("class", "node")
     .attr("r", nodeConfig.CIRCLE_RADIUS)
-    .attr("cx", (d, i) => i * 50)
-    .attr("cy", (d, i) => i * 50);
+    .attr("cx", (d) => d.x)
+    .attr("cy", (d) => d.y);
 
   exitNodes.remove();
 
