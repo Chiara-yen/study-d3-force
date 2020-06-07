@@ -1,8 +1,9 @@
 import React from "react";
 import "./App.css";
+import { ForceLayout } from "./ForceLayout";
 
 function App() {
-  return <svg>SVG</svg>;
+  return <ForceLayout />;
 }
 
 export default App;
