@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { nodeConfig } from "./configs";
 
 const drawNodes = (svgElement, data) => {
   const svg = d3.select(svgElement);
@@ -11,7 +12,7 @@ const drawNodes = (svgElement, data) => {
   enterNodes
     .append("circle")
     .attr("class", "node")
-    .attr("r", 30)
+    .attr("r", nodeConfig.CIRCLE_RADIUS)
     .attr("cx", (d, i) => i * 50)
     .attr("cy", (d, i) => i * 50);
 
