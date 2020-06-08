@@ -5,5 +5,5 @@ export const svgConfig = {
 
 export const nodeConfig = {
   CIRCLE_RADIUS: 30,
-  CLASSNAME_SELECTOR: "node-group",
+  CLASS_NAME_SELECTOR: "node-group",
 };
