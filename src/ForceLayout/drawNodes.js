@@ -5,11 +5,13 @@ const drawNodes = (svgElement, data) => {
   const svg = d3.select(svgElement);
   const group = svg.append("g").attr("class", "nodes");
   const updateNodeGroups = group
-    .selectAll(".node-group")
+    .selectAll(`.${nodeConfig.CLASSNAME_SELECTOR}`)
     .data(data, (d) => d.id);
   const enterNodeGroups = updateNodeGroups.enter();
   const exitNodeGroups = updateNodeGroups.exit();
-  const enterNode = enterNodeGroups.append("g").attr("class", "node-group");
+  const enterNode = enterNodeGroups
+    .append("g")
+    .attr("class", nodeConfig.CLASSNAME_SELECTOR);
 
   // 1. append node
   enterNode
