@@ -3,7 +3,7 @@ import { svgConfig, nodeConfig } from "./configs";
 
 const ticked = (svg) => {
   d3.select(svg)
-    .selectAll(".node")
+    .selectAll(".node-group")
     .attr("transform", (d) => `translate(${d.x},${d.y})`);
 };
 

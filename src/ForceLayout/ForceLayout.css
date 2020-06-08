@@ -3,3 +3,7 @@
   stroke: #555;
   stroke-width: 3px;
 }
+
+.node-label {
+  fill: black;
+}
