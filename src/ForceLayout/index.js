@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import "./ForceLayout.css";
-import setSVG from "./setSVG";
-import setSimulation from "./setSimulation";
-import drawNodes from "./drawNodes";
-import drawLinks from "./drawLinks";
+import React, { useRef, useEffect } from 'react';
+import './ForceLayout.css';
+import setSVG from './setSVG';
+import setSimulation from './setSimulation';
+import drawNodes from './drawNodes';
+import drawLinks from './drawLinks';
 
 export const ForceLayout = ({ data }) => {
   const svgRef = useRef(null);
