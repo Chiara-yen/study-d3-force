@@ -5,7 +5,7 @@ import setSimulation from './setSimulation';
 import drawNodes from './drawNodes';
 import drawLinks from './drawLinks';
 
-export const ForceLayout = ({ data }) => {
+export default function ForceLayout({ data }) {
   const svgRef = useRef(null);
   useEffect(() => {
     const svgElement = svgRef.current;
@@ -17,4 +17,4 @@ export const ForceLayout = ({ data }) => {
     setSimulation(svgElement, nodes, links);
   });
   return <svg ref={svgRef} />;
-};
+}
