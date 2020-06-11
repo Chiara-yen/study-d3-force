@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { ForceLayout } from './ForceLayout';
+import ForceLayout from './ForceLayout';
 import DataPrinter from './DataPrinter';
 import data from './data';
 
