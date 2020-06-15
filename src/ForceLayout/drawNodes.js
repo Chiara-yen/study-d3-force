@@ -3,8 +3,9 @@ import { nodeConfig } from './configs';
 
 const drawNodes = (svgElement, data) => {
   const svg = d3.select(svgElement);
-  const group = svg.append('g').attr('class', 'nodes');
-  const updateNodeGroups = group
+  const updateNodeGroups = svg
+    .append('g')
+    .attr('class', 'nodes')
     .selectAll(`.${nodeConfig.CLASS_NAME_SELECTOR}`)
     .data(data, (d) => d.id);
   const enterNodeGroups = updateNodeGroups.enter();
@@ -40,6 +41,8 @@ const drawNodes = (svgElement, data) => {
 
   // 5. remove unused node group
   exitNodeGroups.remove();
+
+  return updateNodeGroups;
 };
 
 export default drawNodes;

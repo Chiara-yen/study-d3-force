@@ -3,8 +3,9 @@ import { linkConfig } from './configs';
 
 const drawLinks = (svgElement, data) => {
   const svg = d3.select(svgElement);
-  const group = svg.append('g').attr('class', 'links');
-  const updateLink = group
+  const updateLink = svg
+    .append('g')
+    .attr('class', 'links')
     .selectAll(`.${linkConfig.CLASS_NAME_SELECTOR}`)
     .data(data, (d) => d.id);
   const enterLink = updateLink.enter();
@@ -29,6 +30,8 @@ const drawLinks = (svgElement, data) => {
 
   // 3. remove unused link
   exitLink.remove();
+
+  return updateLink;
 };
 
 export default drawLinks;
