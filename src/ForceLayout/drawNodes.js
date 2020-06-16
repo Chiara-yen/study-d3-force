@@ -7,7 +7,7 @@ const generateColors = (data) => {
   return colors;
 };
 
-const drawNodes = (svgElement, data) => {
+const drawNodes = (svgElement, data, onNodeClick) => {
   const colors = generateColors(data);
   const svg = d3.select(svgElement);
   const group = svg.append('g').attr('class', 'nodes');
@@ -28,7 +28,7 @@ const drawNodes = (svgElement, data) => {
     .attr('cx', (d) => d.x)
     .attr('cy', (d) => d.y)
     .attr('fill', (d) => colors(d.group))
-    .on('click', (d) => console.log(d));
+    .on('click', onNodeClick);
 
   // 2. append node label
   enterNode

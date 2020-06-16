@@ -10,10 +10,11 @@ export default function ForceLayout({ data }) {
   useEffect(() => {
     const svgElement = svgRef.current;
     const { links, nodes } = data;
+    const onNodeClick = (d) => console.log(d);
 
     setSVG(svgElement);
     drawLinks(svgElement, links);
-    drawNodes(svgElement, nodes);
+    drawNodes(svgElement, nodes, onNodeClick);
     setSimulation(svgElement, nodes, links);
   });
   return <svg ref={svgRef} />;
