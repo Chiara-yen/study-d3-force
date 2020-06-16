@@ -1,7 +1,14 @@
 import * as d3 from 'd3';
 import { nodeConfig } from './configs';
 
+const generateColors = (data) => {
+  const domain = data.map((d) => d.group);
+  const colors = d3.scaleOrdinal(domain, d3.schemeCategory10);
+  return colors;
+};
+
 const drawNodes = (svgElement, data) => {
+  const colors = generateColors(data);
   const svg = d3.select(svgElement);
   const group = svg.append('g').attr('class', 'nodes');
   const updateNodeGroups = group
@@ -19,7 +26,9 @@ const drawNodes = (svgElement, data) => {
     .attr('class', 'node')
     .attr('r', nodeConfig.CIRCLE_RADIUS)
     .attr('cx', (d) => d.x)
-    .attr('cy', (d) => d.y);
+    .attr('cy', (d) => d.y)
+    .attr('fill', (d) => colors(d.group))
+    .on('click', (d) => console.log(d));
 
   // 2. append node label
   enterNode
