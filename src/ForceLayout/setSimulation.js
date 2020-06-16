@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { svgConfig, nodeConfig, linkConfig } from './configs';
 
-const ticked = (svg) => {
+export const ticked = (svg) => {
   d3.select(svg)
     .selectAll(`.${nodeConfig.CLASS_NAME_SELECTOR}`)
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
@@ -32,9 +32,9 @@ const setSimulation = (svg, nodes, links) => {
    * https://github.com/d3/d3-force#simulation_nodes
    * will append 5 props index, vx, vy, x, v on each node object
    */
-  simulation.nodes(nodes, (d) => d.id);
-  simulation.force('link').links(links, (d) => d.id);
-  simulation.on('tick', () => ticked(svg));
+  // simulation.nodes(nodes, (d) => d.id);
+  // simulation.force('link').links(links, (d) => d.id);
+  // simulation.on('tick', () => ticked(svg));
 
   return simulation;
 };
