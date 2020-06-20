@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { nodeConfig } from './configs';
+import { nodeConfig } from '../configs';
 import drawNodes from './drawNodes';
 import drawLinks from './drawLinks';
 

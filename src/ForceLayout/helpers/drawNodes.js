@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { nodeConfig } from './configs';
+import { nodeConfig } from '../configs';
 
 const drawNodes = (svgElement, data) => {
   const svg = d3.select(svgElement);

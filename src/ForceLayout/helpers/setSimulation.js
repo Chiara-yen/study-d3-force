@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { svgConfig, nodeConfig, linkConfig } from './configs';
+import { svgConfig, nodeConfig, linkConfig } from '../configs';
 
 const ticked = (svg) => {
   d3.select(svg)

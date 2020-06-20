@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { linkConfig } from './configs';
+import { linkConfig } from '../configs';
 
 const drawLinks = (svgElement, data) => {
   const svg = d3.select(svgElement);

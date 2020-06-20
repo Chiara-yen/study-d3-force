@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import setSvg from './setSVG';
+import setSvg from './helpers/setSVG';
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 

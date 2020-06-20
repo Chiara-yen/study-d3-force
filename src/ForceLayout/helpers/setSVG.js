@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { svgConfig } from './configs';
+import { svgConfig } from '../configs';
 
 export default function setSvg(d3Container) {
   const svg = d3
