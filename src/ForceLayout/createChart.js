@@ -29,6 +29,10 @@ export default function createChart(svgRef) {
   let nodesData = [];
   let linksData = [];
 
+  eventDispatch.on(EVENTS.CLICK_HULL, (d) => {
+    console.log('CLICK_HULL =>', d);
+  });
+
   function ticked() {
     node.attr('transform', (d) => `translate(${d.x},${d.y})`);
 

@@ -2,9 +2,10 @@ import * as d3 from 'd3';
 
 export const EVENTS = {
   CLICK_NODE: 'click_node',
+  CLICK_HULL: 'click_hull',
 };
 
-export const eventDispatch = d3.dispatch(EVENTS.CLICK_NODE);
+export const eventDispatch = d3.dispatch(EVENTS.CLICK_NODE, EVENTS.CLICK_HULL);
 
 export const svgConfig = {
   WIDTH: window.innerWidth || 960,
