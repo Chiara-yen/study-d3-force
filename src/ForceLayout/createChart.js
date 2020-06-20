@@ -1,6 +1,7 @@
 import { linkConfig, nodeConfig } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
+import insertLink from './helpers/insertLink';
 import insertNode from './helpers/insertNode';
 
 export default function createChart(svgRef) {
@@ -38,11 +39,7 @@ export default function createChart(svgRef) {
 
     node = node.data(nodes, (d) => d.id).join(insertNode);
 
-    link = link
-      .data(links, (d) => [d.source, d.target])
-      .join((enter) =>
-        enter.append('line').attr('class', linkConfig.CLASS_NAME_SELECTOR)
-      );
+    link = link.data(links, (d) => [d.source, d.target]).join(insertLink);
 
     /**
      * https://github.com/d3/d3-force#simulation_nodes
