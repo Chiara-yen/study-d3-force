@@ -7,7 +7,14 @@
   fill: black;
 }
 
-.link {
-  stroke: lightgray;
+.links {
+  stroke: darkgrey;
   stroke-width: 3px;
+}
+
+.hulls {
+  opacity: 0.3;
+  stroke-width: 10px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
