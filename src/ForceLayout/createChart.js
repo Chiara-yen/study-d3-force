@@ -22,7 +22,7 @@ export default function createChart(svgRef) {
     .selectAll(`.${nodeConfig.CLASS_NAME_SELECTOR}`);
 
   function ticked() {
-    node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
+    node.attr('transform', (d) => `translate(${d.x},${d.y})`);
 
     link
       .attr('x1', (d) => d.source.x)

@@ -1,5 +1,8 @@
 import { nodeConfig } from '../configs';
 
 export default function updateNode(update) {
-  return update.attr('fill', (d) => nodeConfig.getGroupNumberColor(d.group));
+  update
+    .selectAll('circle')
+    .attr('fill', (d) => nodeConfig.getGroupNumberColor(d.group));
+  return update;
 }
