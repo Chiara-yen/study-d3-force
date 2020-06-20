@@ -1,9 +1,7 @@
-import * as d3 from 'd3';
+import { linkConfig, nodeConfig } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
-import { linkConfig, nodeConfig } from './configs';
-
-const color = d3.scaleOrdinal(d3.schemeTableau10);
+import insertNode from './helpers/insertNode';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -38,15 +36,7 @@ export default function createChart(svgRef) {
     nodes = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
     links = links.map((d) => Object.assign({}, d));
 
-    node = node
-      .data(nodes, (d) => d.id)
-      .join((enter) =>
-        enter
-          .append('circle')
-          .attr('class', nodeConfig.CLASS_NAME_SELECTOR)
-          .attr('r', nodeConfig.CIRCLE_RADIUS)
-          .attr('fill', (d) => color(d.group))
-      );
+    node = node.data(nodes, (d) => d.id).join(insertNode);
 
     link = link
       .data(links, (d) => [d.source, d.target])
