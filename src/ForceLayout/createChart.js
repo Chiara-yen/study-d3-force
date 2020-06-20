@@ -1,16 +1,14 @@
 import * as d3 from 'd3';
 import setSvg from './helpers/setSVG';
+import setSimulation from './helpers/setSimulation';
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
 
-  const simulation = d3.forceSimulation()
-      .force("charge", d3.forceManyBody().strength(-1000))
-      .force("link", d3.forceLink().id(d => d.id).distance(200))
-      .force("x", d3.forceX())
-      .force("y", d3.forceY())
+  const simulation = setSimulation();
+  simulation
       .on("tick", ticked);
 
   let link = svg.append("g")
