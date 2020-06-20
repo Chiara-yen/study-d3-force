@@ -1,5 +1,5 @@
 .node {
-  stroke: #555;
+  stroke: whitesmoke;
   stroke-width: 3px;
 }
 
@@ -8,5 +8,6 @@
 }
 
 .link {
-  stroke: #333;
+  stroke: lightgray;
+  stroke-width: 3px;
 }
