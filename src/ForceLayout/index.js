@@ -8,6 +8,9 @@ export default function ForceLayout({ data }) {
 
   useEffect(() => {
     chartRef.current = createChart(svgRef.current);
+    chartRef.current.setNodeClickCallback((node) =>
+      console.log('clicked node =>', node)
+    );
   }, [svgRef]);
 
   useEffect(() => {

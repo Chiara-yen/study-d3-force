@@ -1,4 +1,4 @@
-import { linkConfig, nodeConfig } from './configs';
+import { linkConfig, nodeConfig, EVENTS, eventDispatch } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
 import insertLink from './helpers/insertLink';
@@ -7,7 +7,6 @@ import updateNode from './helpers/updateNode';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
-
   const simulation = setSimulation();
   simulation.on('tick', ticked);
 
@@ -38,21 +37,19 @@ export default function createChart(svgRef) {
     nodes = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
     links = links.map((d) => Object.assign({}, d));
 
+    // Update chart data
     node = node.data(nodes, (d) => d.id).join(insertNode, updateNode);
-
     link = link.data(links, (d) => [d.source, d.target]).join(insertLink);
 
-    /**
-     * https://github.com/d3/d3-force#simulation_nodes
-     * will append 5 props index, vx, vy, x, v on each node object
-     */
-    simulation.nodes(nodes);
-    simulation.force('link').links(links);
+    simulation.nodes(nodes); // will append 5 props index, vx, vy, x, v on each node object
+    simulation.force('link').links(links); // will replace source and target props with the correlate node object
     simulation.alpha(1).restart();
   }
 
   const chartInterface = {
     update,
+    setNodeClickCallback: (callback) =>
+      eventDispatch.on(EVENTS.CLICK_NODE, callback),
   };
   const chart = Object.assign(svg.node(), chartInterface);
   return chart;
