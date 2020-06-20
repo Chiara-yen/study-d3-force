@@ -7,6 +7,7 @@ import insertHull from './helpers/insertHull';
 import insertLink from './helpers/insertLink';
 import insertNode from './helpers/insertNode';
 import updateNode from './helpers/updateNode';
+import convertToHullPathPoints from './helpers/convertToHullPathPoints';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -38,23 +39,9 @@ export default function createChart(svgRef) {
       .attr('y2', (d) => d.target.y);
 
     hull.attr('d', (g) => {
-      const offset = 30;
       const nodeGroups = _.groupBy(nodesData, 'group');
-      const hullPoints = nodeGroups[g].reduce((acc, n, i) => {
-        if (acc[i] && acc[i].length < 2) return acc;
-        acc.push([n.x - offset, n.y - offset]);
-        acc.push([n.x - offset, n.y + offset]);
-        acc.push([n.x + offset, n.y - offset]);
-        acc.push([n.x + offset, n.y + offset]);
-        return acc;
-      }, []);
-      const hullData = d3.polygonHull(hullPoints);
-
-      if (!hullData) return;
-
-      hullData.push(hullData[0]);
-
-      return d3.line()(hullData);
+      const hullPathPoints = convertToHullPathPoints(nodeGroups[g]);
+      return d3.line()(hullPathPoints);
     });
   }
 
