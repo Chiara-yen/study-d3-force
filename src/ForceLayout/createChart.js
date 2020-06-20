@@ -3,6 +3,7 @@ import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
 import insertLink from './helpers/insertLink';
 import insertNode from './helpers/insertNode';
+import updateNode from './helpers/updateNode';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -37,7 +38,7 @@ export default function createChart(svgRef) {
     nodes = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
     links = links.map((d) => Object.assign({}, d));
 
-    node = node.data(nodes, (d) => d.id).join(insertNode);
+    node = node.data(nodes, (d) => d.id).join(insertNode, updateNode);
 
     link = link.data(links, (d) => [d.source, d.target]).join(insertLink);
 
