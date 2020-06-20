@@ -29,8 +29,34 @@ export default function createChart(svgRef) {
   let nodesData = [];
   let linksData = [];
 
-  eventDispatch.on(EVENTS.CLICK_HULL, (d) => {
-    console.log('CLICK_HULL =>', d);
+  eventDispatch.on(EVENTS.CLICK_HULL, (groupId) => {
+    const groups = _.groupBy(nodesData, 'group');
+    const clickedGroup = groups[groupId];
+
+    if (clickedGroup.length >= 2) {
+      const mergedNode = {
+        nodes: clickedGroup,
+        id: `group-${groupId}`,
+        text: `group-${groupId}`,
+        group: groupId,
+        x: _.meanBy(clickedGroup, 'x'),
+        y: _.meanBy(clickedGroup, 'y'),
+        vx: _.meanBy(clickedGroup, 'vx'),
+        vy: _.meanBy(clickedGroup, 'vy'),
+      };
+
+      const newNodes = nodesData
+        .filter((d) => d.group !== groupId)
+        .concat(mergedNode);
+
+      const newLinks = linksData.map((link) => {
+        if (link.source.group === groupId) link.source = mergedNode;
+        if (link.target.group === groupId) link.target = mergedNode;
+        return link;
+      });
+
+      update({ nodes: newNodes, links: newLinks });
+    }
   });
 
   function ticked() {
@@ -56,7 +82,7 @@ export default function createChart(svgRef) {
     nodesData = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
     linksData = links.map((d) => Object.assign({}, d));
 
-    // Update chart data
+    // Update chart selections
     node = node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
     link = link.data(linksData, (d) => [d.source, d.target]).join(insertLink);
     hull = hull
