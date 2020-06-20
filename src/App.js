@@ -7,14 +7,14 @@ import data2 from './data2';
 
 function App() {
   const [state, setstate] = useState(data);
-
-  setTimeout(() => {
-    setstate(data2);
-  }, 3000);
+  const onButtonClick = () => setstate(data2);
 
   return (
     <>
       <ForceLayout data={state} />
+      <button type='button' onClick={onButtonClick}>
+        Set data 2
+      </button>
       <DataPrinter data={state} />
     </>
   );
