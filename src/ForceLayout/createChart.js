@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { linkConfig, nodeConfig, EVENTS, eventDispatch } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
+import insertHull from './helpers/insertHull';
 import insertLink from './helpers/insertLink';
 import insertNode from './helpers/insertNode';
 import updateNode from './helpers/updateNode';
@@ -69,13 +70,7 @@ export default function createChart(svgRef) {
     link = link.data(linksData, (d) => [d.source, d.target]).join(insertLink);
     hull = hull
       .data(_.unionBy(nodesData.map((node) => node.group)))
-      .join((enter) =>
-        enter
-          .append('path')
-          .attr('class', 'hull')
-          .style('stroke', (d) => nodeConfig.getGroupNumberColor(d))
-          .style('fill', (d) => nodeConfig.getGroupNumberColor(d))
-      );
+      .join(insertHull);
 
     simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, v on each node object
     simulation.force('link').links(linksData); // will replace source and target props with the correlate node object
