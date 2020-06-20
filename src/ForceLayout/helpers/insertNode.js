@@ -1,10 +1,11 @@
-import { nodeConfig } from '../configs';
+import { nodeConfig, EVENTS, eventDispatch } from '../configs';
 
 export default function insertNode(enter) {
   const wrap = enter
     .append('g')
     .attr('class', nodeConfig.CLASS_NAME_SELECTOR)
-    .attr('node-id', (d) => d.id);
+    .attr('node-id', (d) => d.id)
+    .on('click', (d) => eventDispatch.call(EVENTS.CLICK_NODE, this, d));
 
   wrap
     .append('circle')

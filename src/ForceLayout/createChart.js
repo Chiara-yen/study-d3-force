@@ -1,4 +1,4 @@
-import { linkConfig, nodeConfig } from './configs';
+import { linkConfig, nodeConfig, EVENTS, eventDispatch } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
 import insertLink from './helpers/insertLink';
@@ -48,6 +48,8 @@ export default function createChart(svgRef) {
 
   const chartInterface = {
     update,
+    setNodeClickCallback: (callback) =>
+      eventDispatch.on(EVENTS.CLICK_NODE, callback),
   };
   const chart = Object.assign(svg.node(), chartInterface);
   return chart;
