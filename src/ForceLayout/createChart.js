@@ -31,7 +31,7 @@ export default function createChart(svgRef) {
       .attr('y2', (d) => d.target.y);
   }
 
-  const update = ({ nodes, links }) => {
+  function update({ nodes, links }) {
     // Make a shallow copy to protect against mutation, while
     // recycling old nodes to preserve position and velocity.
     const old = new Map(node.data().map((d) => [d.id, d]));
@@ -49,7 +49,7 @@ export default function createChart(svgRef) {
     simulation.nodes(nodes);
     simulation.force('link').links(links);
     simulation.alpha(1).restart();
-  };
+  }
 
   const chartInterface = {
     update,
