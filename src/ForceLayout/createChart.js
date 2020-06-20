@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
+import { linkConfig } from './configs';
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
@@ -11,10 +12,9 @@ export default function createChart(svgRef) {
   simulation
       .on("tick", ticked);
 
-  let link = svg.append("g")
-      .attr("stroke", "#000")
-      .attr("stroke-width", 1.5)
-    .selectAll("line");
+  let link = svg.append('g')
+      .attr('class', 'links')
+      .selectAll(`.${linkConfig.CLASS_NAME_SELECTOR}`);
 
   let node = svg.append("g")
       .attr("stroke", "#fff")
@@ -46,7 +46,8 @@ export default function createChart(svgRef) {
 
     link = link
       .data(links, d => [d.source, d.target])
-      .join("line");
+      .join(enter => enter.append("line")
+        .attr('class', linkConfig.CLASS_NAME_SELECTOR));
 
     /**
      * https://github.com/d3/d3-force#simulation_nodes
