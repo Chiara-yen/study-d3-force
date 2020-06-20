@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
-import { linkConfig } from './configs';
+import { linkConfig, nodeConfig } from './configs';
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
@@ -18,9 +18,8 @@ export default function createChart(svgRef) {
 
   let node = svg
     .append('g')
-    .attr('stroke', '#fff')
-    .attr('stroke-width', 1.5)
-    .selectAll('circle');
+    .attr('class', 'nodes')
+    .selectAll(`.${nodeConfig.CLASS_NAME_SELECTOR}`);
 
   function ticked() {
     node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
@@ -44,8 +43,9 @@ export default function createChart(svgRef) {
       .join((enter) =>
         enter
           .append('circle')
-          .attr('r', 8)
-          .attr('fill', (d) => color(d.id))
+          .attr('class', nodeConfig.CLASS_NAME_SELECTOR)
+          .attr('r', nodeConfig.CIRCLE_RADIUS)
+          .attr('fill', (d) => color(d.group))
       );
 
     link = link
