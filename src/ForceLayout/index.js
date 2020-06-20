@@ -11,7 +11,7 @@ export default function ForceLayout({ data }) {
   }, [svgRef]);
 
   useEffect(() => {
-    chartRef.current.update(data)
+    chartRef.current.update(data);
   }, [data]);
 
   return <svg ref={svgRef} />;

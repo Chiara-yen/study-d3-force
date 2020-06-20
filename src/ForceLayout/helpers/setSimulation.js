@@ -16,4 +16,4 @@ export default function setSimulation() {
     );
 
   return simulation;
-};
+}
