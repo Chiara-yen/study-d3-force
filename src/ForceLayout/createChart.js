@@ -48,6 +48,10 @@ export default function createChart(svgRef) {
       .data(links, d => [d.source, d.target])
       .join("line");
 
+    /**
+     * https://github.com/d3/d3-force#simulation_nodes
+     * will append 5 props index, vx, vy, x, v on each node object
+     */
     simulation.nodes(nodes);
     simulation.force("link").links(links);
     simulation.alpha(1).restart();
