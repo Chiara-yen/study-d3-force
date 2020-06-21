@@ -115,7 +115,7 @@ export default function createChart(svgRef) {
     node = node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
     link = link.data(linksData, (d) => [d.source, d.target]).join(insertLink);
     hull = hull
-      .data(_.unionBy(nodesData.map((node) => node.group)))
+      .data(_.unionBy(nodesData.map((node) => node.group)), (d) => d)
       .join(insertHull);
 
     simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, v on each node object
