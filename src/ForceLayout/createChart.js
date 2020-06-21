@@ -32,8 +32,11 @@ export default function createChart(svgRef) {
   eventDispatch.on(EVENTS.CLICK_HULL, (groupId) => {
     const groups = _.groupBy(nodesData, 'group');
     const clickedGroup = groups[groupId];
+    const originalNodes = _.get(clickedGroup, '[0].nodes');
+    const isNeedToCollapse = clickedGroup.length >= 2;
+    const isNeedToExpand = !isNeedToCollapse && Boolean(originalNodes);
 
-    if (clickedGroup.length >= 2) {
+    if (isNeedToCollapse) {
       const mergedNode = {
         nodes: clickedGroup,
         id: `group-${groupId}`,
@@ -50,8 +53,43 @@ export default function createChart(svgRef) {
         .concat(mergedNode);
 
       const newLinks = linksData.map((link) => {
-        if (link.source.group === groupId) link.source = mergedNode;
-        if (link.target.group === groupId) link.target = mergedNode;
+        const originalSource = _.cloneDeep(link.source);
+        const originalTarget = _.cloneDeep(link.target);
+
+        if (link.source.group === groupId) {
+          link.source = _.cloneDeep(mergedNode);
+          link.source.originalId = originalSource.id;
+        }
+
+        if (link.target.group === groupId) {
+          link.target = _.cloneDeep(mergedNode);
+          link.target.originalId = originalTarget.id;
+        }
+
+        return link;
+      });
+
+      update({ nodes: newNodes, links: newLinks });
+    }
+
+    if (isNeedToExpand) {
+      const newNodes = nodesData
+        .filter((d) => d.group !== groupId)
+        .concat(originalNodes);
+
+      const newLinks = linksData.map((link) => {
+        if (link.source.group === groupId) {
+          const original = newNodes.filter(
+            (n) => n.id === link.source.originalId
+          );
+          link.source = original[0];
+        }
+        if (link.target.group === groupId) {
+          const original = newNodes.filter(
+            (n) => n.id === link.target.originalId
+          );
+          link.target = original[0];
+        }
         return link;
       });
 

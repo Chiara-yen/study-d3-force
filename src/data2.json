@@ -10,8 +10,8 @@
     { "id": 7, "text": "node-7", "group": 1 },
     { "id": 8, "text": "node-8", "group": 1 },
     { "id": 9, "text": "node-9", "group": 1 },
-    { "id": 10, "text": "node-10", "group": 1 },
-    { "id": 11, "text": "node-11", "group": 1 }
+    { "id": 10, "text": "node-10", "group": 2 },
+    { "id": 11, "text": "node-11", "group": 2 }
   ],
   "links": [
     { "id": 0, "source": 0, "target": 1, "text": "link-0" },
