@@ -29,8 +29,63 @@ export default function createChart(svgRef) {
   let nodesData = [];
   let linksData = [];
 
-  eventDispatch.on(EVENTS.CLICK_HULL, (d) => {
-    console.log('CLICK_HULL =>', d);
+  eventDispatch.on(EVENTS.CLICK_HULL, (groupId) => {
+    const groups = _.groupBy(nodesData, 'group');
+    const clickedGroup = groups[groupId];
+    const originalNodes = _.get(clickedGroup, '[0].nodes');
+    const isNeedToCollapse = clickedGroup.length >= 2;
+    const isNeedToExpand = !isNeedToCollapse && Boolean(originalNodes);
+
+    if (isNeedToCollapse) {
+      const mergedNode = {
+        nodes: clickedGroup,
+        id: `group-${groupId}`,
+        text: `group-${groupId}`,
+        group: groupId,
+        x: _.meanBy(clickedGroup, 'x'),
+        y: _.meanBy(clickedGroup, 'y'),
+        vx: _.meanBy(clickedGroup, 'vx'),
+        vy: _.meanBy(clickedGroup, 'vy'),
+      };
+
+      const newNodes = nodesData
+        .filter((d) => d.group !== groupId)
+        .concat(mergedNode);
+
+      const newLinks = linksData.map((link) => {
+        if (link.source.group === groupId) {
+          link.sourceOriginalId = _.clone(link.source.id);
+          link.source = `group-${groupId}`;
+        }
+
+        if (link.target.group === groupId) {
+          link.targetOriginalId = _.clone(link.target.id);
+          link.target = `group-${groupId}`;
+        }
+
+        return link;
+      });
+
+      update({ nodes: newNodes, links: newLinks });
+    }
+
+    if (isNeedToExpand) {
+      const newNodes = nodesData
+        .filter((d) => d.group !== groupId)
+        .concat(originalNodes);
+
+      const newLinks = linksData.map((link) => {
+        if (link.source.group === groupId) {
+          link.source = link.sourceOriginalId;
+        }
+        if (link.target.group === groupId) {
+          link.target = link.targetOriginalId;
+        }
+        return link;
+      });
+
+      update({ nodes: newNodes, links: newLinks });
+    }
   });
 
   function ticked() {
@@ -56,11 +111,11 @@ export default function createChart(svgRef) {
     nodesData = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
     linksData = links.map((d) => Object.assign({}, d));
 
-    // Update chart data
+    // Update chart selections
     node = node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
     link = link.data(linksData, (d) => [d.source, d.target]).join(insertLink);
     hull = hull
-      .data(_.unionBy(nodesData.map((node) => node.group)))
+      .data(_.unionBy(nodesData.map((node) => node.group)), (d) => d)
       .join(insertHull);
 
     simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, v on each node object
