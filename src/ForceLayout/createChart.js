@@ -53,17 +53,14 @@ export default function createChart(svgRef) {
         .concat(mergedNode);
 
       const newLinks = linksData.map((link) => {
-        const originalSource = _.cloneDeep(link.source);
-        const originalTarget = _.cloneDeep(link.target);
-
         if (link.source.group === groupId) {
-          link.source = _.cloneDeep(mergedNode);
-          link.source.originalId = originalSource.id;
+          link.sourceOriginalId = _.clone(link.source.id);
+          link.source = `group-${groupId}`;
         }
 
         if (link.target.group === groupId) {
-          link.target = _.cloneDeep(mergedNode);
-          link.target.originalId = originalTarget.id;
+          link.targetOriginalId = _.clone(link.target.id);
+          link.target = `group-${groupId}`;
         }
 
         return link;
@@ -79,16 +76,10 @@ export default function createChart(svgRef) {
 
       const newLinks = linksData.map((link) => {
         if (link.source.group === groupId) {
-          const original = newNodes.filter(
-            (n) => n.id === link.source.originalId
-          );
-          link.source = original[0];
+          link.source = link.sourceOriginalId;
         }
         if (link.target.group === groupId) {
-          const original = newNodes.filter(
-            (n) => n.id === link.target.originalId
-          );
-          link.target = original[0];
+          link.target = link.targetOriginalId;
         }
         return link;
       });
