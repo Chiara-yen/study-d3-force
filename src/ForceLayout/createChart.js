@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import * as _ from 'lodash';
-import { linkConfig, nodeConfig, EVENTS, eventDispatch } from './configs';
+import { nodeConfig, EVENTS, eventDispatch } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
 import insertHull from './helpers/insertHull';
@@ -9,18 +9,16 @@ import insertNode from './helpers/insertNode';
 import updateNode from './helpers/updateNode';
 import convertToHullPathPoints from './helpers/convertToHullPathPoints';
 import appendHullGroup from './helpers/appendHullGroup';
+import appendLinkGroup from './helpers/appendLinkGroup';
 import selectAllHull from './helpers/selectAllHull';
+import selectAllLink from './helpers/selectAllLink';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
   const simulation = setSimulation();
   simulation.on('tick', ticked);
   appendHullGroup(svg);
-
-  let link = svg
-    .append('g')
-    .attr('class', 'links')
-    .selectAll(`.${linkConfig.CLASS_NAME_SELECTOR}`);
+  appendLinkGroup(svg);
 
   let node = svg
     .append('g')
@@ -92,7 +90,7 @@ export default function createChart(svgRef) {
   function ticked() {
     node.attr('transform', (d) => `translate(${d.x},${d.y})`);
 
-    link
+    selectAllLink(svg)
       .attr('x1', (d) => d.source.x)
       .attr('y1', (d) => d.source.y)
       .attr('x2', (d) => d.target.x)
@@ -114,7 +112,9 @@ export default function createChart(svgRef) {
 
     // Update chart selections
     node = node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
-    link = link.data(linksData, (d) => [d.source, d.target]).join(insertLink);
+    selectAllLink(svg)
+      .data(linksData, (d) => [d.source, d.target])
+      .join(insertLink);
     selectAllHull(svg)
       .data(_.unionBy(nodesData.map((node) => node.group)), (d) => d)
       .join(insertHull);

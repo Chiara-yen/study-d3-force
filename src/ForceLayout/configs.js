@@ -24,6 +24,7 @@ export const nodeConfig = {
 };
 
 export const linkConfig = {
-  LENGTH: 100,
+  GROUP_CLASS_NAME_SELECTOR: 'links',
   CLASS_NAME_SELECTOR: 'link',
+  LENGTH: 100,
 };
