@@ -30,6 +30,7 @@ export default function createChart(svgRef) {
     const groups = _.groupBy(nodesData, 'group');
     const clickedGroup = groups[groupId];
     const originalNodes = _.get(clickedGroup, '[0].nodes');
+    const nodesDataWithoutGroup = nodesData.filter((d) => d.group !== groupId);
     const isNeedToCollapse = clickedGroup.length >= 2;
     const isNeedToExpand = !isNeedToCollapse && Boolean(originalNodes);
 
@@ -45,9 +46,7 @@ export default function createChart(svgRef) {
         vy: _.meanBy(clickedGroup, 'vy'),
       };
 
-      const newNodes = nodesData
-        .filter((d) => d.group !== groupId)
-        .concat(mergedNode);
+      const newNodes = nodesDataWithoutGroup.concat(mergedNode);
 
       const newLinks = linksData.map((link) => {
         if (link.source.group === groupId) {
@@ -67,9 +66,7 @@ export default function createChart(svgRef) {
     }
 
     if (isNeedToExpand) {
-      const newNodes = nodesData
-        .filter((d) => d.group !== groupId)
-        .concat(originalNodes);
+      const newNodes = nodesDataWithoutGroup.concat(originalNodes);
 
       const newLinks = linksData.map((link) => {
         if (link.source.group === groupId) {
