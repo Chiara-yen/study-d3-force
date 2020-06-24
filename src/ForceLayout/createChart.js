@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import * as _ from 'lodash';
-import { nodeConfig, EVENTS, eventDispatch } from './configs';
+import { EVENTS, eventDispatch } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
 import insertHull from './helpers/insertHull';
@@ -10,8 +10,10 @@ import updateNode from './helpers/updateNode';
 import convertToHullPathPoints from './helpers/convertToHullPathPoints';
 import appendHullGroup from './helpers/appendHullGroup';
 import appendLinkGroup from './helpers/appendLinkGroup';
+import appendNodeGroup from './helpers/appendNodeGroup';
 import selectAllHull from './helpers/selectAllHull';
 import selectAllLink from './helpers/selectAllLink';
+import selectAllNode from './helpers/selectAllNode';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -19,11 +21,7 @@ export default function createChart(svgRef) {
   simulation.on('tick', ticked);
   appendHullGroup(svg);
   appendLinkGroup(svg);
-
-  let node = svg
-    .append('g')
-    .attr('class', 'nodes')
-    .selectAll(`.${nodeConfig.CLASS_NAME_SELECTOR}`);
+  appendNodeGroup(svg);
 
   let nodesData = [];
   let linksData = [];
@@ -88,7 +86,7 @@ export default function createChart(svgRef) {
   });
 
   function ticked() {
-    node.attr('transform', (d) => `translate(${d.x},${d.y})`);
+    selectAllNode(svg).attr('transform', (d) => `translate(${d.x},${d.y})`);
 
     selectAllLink(svg)
       .attr('x1', (d) => d.source.x)
@@ -104,6 +102,7 @@ export default function createChart(svgRef) {
   }
 
   function update({ nodes, links }) {
+    const node = selectAllNode(svg);
     // Make a shallow copy to protect against mutation, while
     // recycling old nodes to preserve position and velocity.
     const old = new Map(node.data().map((d) => [d.id, d]));
@@ -111,7 +110,7 @@ export default function createChart(svgRef) {
     linksData = links.map((d) => Object.assign({}, d));
 
     // Update chart selections
-    node = node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
+    node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
     selectAllLink(svg)
       .data(linksData, (d) => [d.source, d.target])
       .join(insertLink);

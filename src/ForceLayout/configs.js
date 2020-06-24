@@ -18,8 +18,9 @@ export const hullConfig = {
 };
 
 export const nodeConfig = {
-  CIRCLE_RADIUS: 30,
+  GROUP_CLASS_NAME_SELECTOR: 'nodes',
   CLASS_NAME_SELECTOR: 'node-group',
+  CIRCLE_RADIUS: 30,
   getGroupNumberColor: (number) => d3.schemeTableau10[number % 10],
 };
 
