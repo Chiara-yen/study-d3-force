@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import * as _ from 'lodash';
-import { EVENTS, eventDispatch } from './configs';
+import { EVENTS, eventDispatcher } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
 import insertHull from './helpers/insertHull';
@@ -26,7 +26,7 @@ export default function createChart(svgRef) {
   let nodesData = [];
   let linksData = [];
 
-  eventDispatch.on(EVENTS.CLICK_HULL, (groupId) => {
+  eventDispatcher.on(EVENTS.CLICK_HULL, (groupId) => {
     const groups = _.groupBy(nodesData, 'group');
     const clickedGroup = groups[groupId];
     const originalNodes = _.get(clickedGroup, '[0].nodes');
@@ -123,7 +123,7 @@ export default function createChart(svgRef) {
   const chartInterface = {
     update,
     setNodeClickCallback: (callback) =>
-      eventDispatch.on(EVENTS.CLICK_NODE, callback),
+      eventDispatcher.on(EVENTS.CLICK_NODE, callback),
   };
   const chart = Object.assign(svg.node(), chartInterface);
   return chart;

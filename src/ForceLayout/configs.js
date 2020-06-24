@@ -5,7 +5,10 @@ export const EVENTS = {
   CLICK_HULL: 'click_hull',
 };
 
-export const eventDispatch = d3.dispatch(EVENTS.CLICK_NODE, EVENTS.CLICK_HULL);
+export const eventDispatcher = d3.dispatch(
+  EVENTS.CLICK_NODE,
+  EVENTS.CLICK_HULL
+);
 
 export const svgConfig = {
   WIDTH: window.innerWidth || 960,
