@@ -12,6 +12,11 @@ export const svgConfig = {
   HEIGHT: 600,
 };
 
+export const hullConfig = {
+  GROUP_CLASS_NAME_SELECTOR: 'hulls',
+  CLASS_NAME_SELECTOR: 'hull',
+};
+
 export const nodeConfig = {
   CIRCLE_RADIUS: 30,
   CLASS_NAME_SELECTOR: 'node-group',

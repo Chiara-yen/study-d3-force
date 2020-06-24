@@ -8,13 +8,14 @@ import insertLink from './helpers/insertLink';
 import insertNode from './helpers/insertNode';
 import updateNode from './helpers/updateNode';
 import convertToHullPathPoints from './helpers/convertToHullPathPoints';
+import appendHullGroup from './helpers/appendHullGroup';
+import selectAllHull from './helpers/selectAllHull';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
   const simulation = setSimulation();
   simulation.on('tick', ticked);
-
-  let hull = svg.append('g').attr('class', 'hulls').selectAll('.hull');
+  appendHullGroup(svg);
 
   let link = svg
     .append('g')
@@ -97,7 +98,7 @@ export default function createChart(svgRef) {
       .attr('x2', (d) => d.target.x)
       .attr('y2', (d) => d.target.y);
 
-    hull.attr('d', (g) => {
+    selectAllHull(svg).attr('d', (g) => {
       const nodeGroups = _.groupBy(nodesData, 'group');
       const hullPathPoints = convertToHullPathPoints(nodeGroups[g]);
       return d3.line()(hullPathPoints);
@@ -114,7 +115,7 @@ export default function createChart(svgRef) {
     // Update chart selections
     node = node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
     link = link.data(linksData, (d) => [d.source, d.target]).join(insertLink);
-    hull = hull
+    selectAllHull(svg)
       .data(_.unionBy(nodesData.map((node) => node.group)), (d) => d)
       .join(insertHull);
 
