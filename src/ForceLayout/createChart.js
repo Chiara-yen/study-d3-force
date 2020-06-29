@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 import * as _ from 'lodash';
 import { EVENTS, eventDispatcher } from './configs';
 import setSvg from './helpers/setSVG';
@@ -7,7 +6,6 @@ import insertHull from './helpers/insertHull';
 import insertLink from './helpers/insertLink';
 import insertNode from './helpers/insertNode';
 import updateNode from './helpers/updateNode';
-import convertToHullPathPoints from './helpers/convertToHullPathPoints';
 import appendHullGroup from './helpers/appendHullGroup';
 import appendLinkGroup from './helpers/appendLinkGroup';
 import appendNodeGroup from './helpers/appendNodeGroup';
@@ -15,11 +13,12 @@ import selectAllHull from './helpers/selectAllHull';
 import selectAllLink from './helpers/selectAllLink';
 import selectAllNode from './helpers/selectAllNode';
 import { updateData, getNodesData, getLinksData, getGroupsData } from './state';
+import ticked from './helpers/ticked';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
   const simulation = setSimulation();
-  simulation.on('tick', ticked);
+  simulation.on('tick', () => ticked(svg));
   appendHullGroup(svg);
   appendLinkGroup(svg);
   appendNodeGroup(svg);
@@ -81,22 +80,6 @@ export default function createChart(svgRef) {
       update({ nodes: newNodes, links: newLinks });
     }
   });
-
-  function ticked() {
-    selectAllNode(svg).attr('transform', (d) => `translate(${d.x},${d.y})`);
-
-    selectAllLink(svg)
-      .attr('x1', (d) => d.source.x)
-      .attr('y1', (d) => d.source.y)
-      .attr('x2', (d) => d.target.x)
-      .attr('y2', (d) => d.target.y);
-
-    selectAllHull(svg).attr('d', (g) => {
-      const nodeGroups = getGroupsData();
-      const hullPathPoints = convertToHullPathPoints(nodeGroups[g]);
-      return d3.line()(hullPathPoints);
-    });
-  }
 
   function update({ nodes, links }) {
     const node = selectAllNode(svg);
