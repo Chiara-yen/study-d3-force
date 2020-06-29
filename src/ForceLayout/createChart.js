@@ -14,7 +14,7 @@ import appendNodeGroup from './helpers/appendNodeGroup';
 import selectAllHull from './helpers/selectAllHull';
 import selectAllLink from './helpers/selectAllLink';
 import selectAllNode from './helpers/selectAllNode';
-import { updateData, getNodesData, getLinksData } from './state';
+import { updateData, getNodesData, getLinksData, getGroupsData } from './state';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -27,7 +27,7 @@ export default function createChart(svgRef) {
   eventDispatcher.on(EVENTS.CLICK_HULL, (groupId) => {
     const nodesData = getNodesData();
     const linksData = getLinksData();
-    const groups = _.groupBy(nodesData, 'group');
+    const groups = getGroupsData();
     const clickedGroup = groups[groupId];
     const originalNodes = _.get(clickedGroup, '[0].nodes');
     const nodesDataWithoutGroup = nodesData.filter((d) => d.group !== groupId);
@@ -92,7 +92,7 @@ export default function createChart(svgRef) {
       .attr('y2', (d) => d.target.y);
 
     selectAllHull(svg).attr('d', (g) => {
-      const nodeGroups = _.groupBy(getNodesData(), 'group');
+      const nodeGroups = getGroupsData();
       const hullPathPoints = convertToHullPathPoints(nodeGroups[g]);
       return d3.line()(hullPathPoints);
     });
