@@ -14,6 +14,7 @@ import appendNodeGroup from './helpers/appendNodeGroup';
 import selectAllHull from './helpers/selectAllHull';
 import selectAllLink from './helpers/selectAllLink';
 import selectAllNode from './helpers/selectAllNode';
+import { updateData, getNodesData, getLinksData } from './state';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -23,10 +24,9 @@ export default function createChart(svgRef) {
   appendLinkGroup(svg);
   appendNodeGroup(svg);
 
-  let nodesData = [];
-  let linksData = [];
-
   eventDispatcher.on(EVENTS.CLICK_HULL, (groupId) => {
+    const nodesData = getNodesData();
+    const linksData = getLinksData();
     const groups = _.groupBy(nodesData, 'group');
     const clickedGroup = groups[groupId];
     const originalNodes = _.get(clickedGroup, '[0].nodes');
@@ -92,7 +92,7 @@ export default function createChart(svgRef) {
       .attr('y2', (d) => d.target.y);
 
     selectAllHull(svg).attr('d', (g) => {
-      const nodeGroups = _.groupBy(nodesData, 'group');
+      const nodeGroups = _.groupBy(getNodesData(), 'group');
       const hullPathPoints = convertToHullPathPoints(nodeGroups[g]);
       return d3.line()(hullPathPoints);
     });
@@ -103,8 +103,8 @@ export default function createChart(svgRef) {
     // Make a shallow copy to protect against mutation, while
     // recycling old nodes to preserve position and velocity.
     const old = new Map(node.data().map((d) => [d.id, d]));
-    nodesData = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
-    linksData = links.map((d) => Object.assign({}, d));
+    const nodesData = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
+    const linksData = links.map((d) => Object.assign({}, d));
 
     // Update chart selections
     node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
@@ -118,6 +118,8 @@ export default function createChart(svgRef) {
     simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, v on each node object
     simulation.force('link').links(linksData); // will replace source and target props with the correlate node object
     simulation.alpha(1).restart();
+
+    updateData(nodesData, linksData);
   }
 
   const chartInterface = {
