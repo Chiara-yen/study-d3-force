@@ -2,18 +2,12 @@ import * as _ from 'lodash';
 import { EVENTS, eventDispatcher } from './configs';
 import setSvg from './helpers/setSVG';
 import setSimulation from './helpers/setSimulation';
-import insertHull from './helpers/insertHull';
-import insertLink from './helpers/insertLink';
-import insertNode from './helpers/insertNode';
-import updateNode from './helpers/updateNode';
 import appendHullGroup from './helpers/appendHullGroup';
 import appendLinkGroup from './helpers/appendLinkGroup';
 import appendNodeGroup from './helpers/appendNodeGroup';
-import selectAllHull from './helpers/selectAllHull';
-import selectAllLink from './helpers/selectAllLink';
-import selectAllNode from './helpers/selectAllNode';
-import { updateData, getNodesData, getLinksData, getGroupsData } from './state';
+import { getNodesData, getLinksData, getGroupsData } from './state';
 import ticked from './helpers/ticked';
+import updateChart from './updateChart';
 
 export default function createChart(svgRef) {
   const svg = setSvg(svgRef);
@@ -61,7 +55,7 @@ export default function createChart(svgRef) {
         return link;
       });
 
-      update({ nodes: newNodes, links: newLinks });
+      updateChart(svg, simulation, { nodes: newNodes, links: newLinks });
     }
 
     if (isNeedToExpand) {
@@ -77,36 +71,12 @@ export default function createChart(svgRef) {
         return link;
       });
 
-      update({ nodes: newNodes, links: newLinks });
+      updateChart(svg, simulation, { nodes: newNodes, links: newLinks });
     }
   });
 
-  function update({ nodes, links }) {
-    const node = selectAllNode(svg);
-    // Make a shallow copy to protect against mutation, while
-    // recycling old nodes to preserve position and velocity.
-    const old = new Map(node.data().map((d) => [d.id, d]));
-    const nodesData = nodes.map((d) => Object.assign(old.get(d.id) || {}, d));
-    const linksData = links.map((d) => Object.assign({}, d));
-
-    // Update chart selections
-    node.data(nodesData, (d) => d.id).join(insertNode, updateNode);
-    selectAllLink(svg)
-      .data(linksData, (d) => [d.source, d.target])
-      .join(insertLink);
-    selectAllHull(svg)
-      .data(_.unionBy(nodesData.map((node) => node.group)), (d) => d)
-      .join(insertHull);
-
-    simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, v on each node object
-    simulation.force('link').links(linksData); // will replace source and target props with the correlate node object
-    simulation.alpha(1).restart();
-
-    updateData(nodesData, linksData);
-  }
-
   const chartInterface = {
-    update,
+    update: (data = {}) => updateChart(svg, simulation, data),
     setNodeClickCallback: (callback) =>
       eventDispatcher.on(EVENTS.CLICK_NODE, callback),
   };
