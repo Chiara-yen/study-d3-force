@@ -25,7 +25,7 @@ export default function updateChart(svg, simulation, { nodes, links }) {
     .data(_.unionBy(nodesData.map((node) => node.group)), (d) => d)
     .join(insertHull);
 
-  simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, v on each node object
+  simulation.nodes(nodesData); // will append 5 props index, vx, vy, x, y on each node object
   simulation.force('link').links(linksData); // will replace source and target props with the correlate node object
   simulation.alpha(1).restart();
 
